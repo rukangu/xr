@@ -8,42 +8,42 @@
     
     <script>
       AFRAME.registerComponent('pinch-grab', {
-        init: function () {
-          this.grabbedEl = null;
-          // When hand pinches, check for close objects
-          this.el.addEventListener('pinchstarted', this.onPinch.bind(this));
-          // When hand opens, drop the object
-          this.el.addEventListener('pinchended', this.onRelease.bind(this));
-        },
-        onPinch: function (evt) {
-          // Find the closest object in the "interactive" class
-          const handPos = this.el.object3D.position;
-          const els = document.querySelectorAll('.interactive');
-          let closestEl = null;
-          let minMsg = 0.5; // Grab distance threshold (meters)
+  init: function () {
+    this.grabbedEl = null;
+    this.el.addEventListener('pinchstarted', this.onPinch.bind(this));
+    this.el.addEventListener('pinchended', this.onRelease.bind(this));
+  },
+  onPinch: function (evt) {
+    const els = document.querySelectorAll('.interactive');
+    let closestEl = null;
+    let minDist = 0.3; // Fixed typo: was "minMsg"
 
-          els.forEach(el => {
-            const dist = el.object3D.getWorldPosition(new THREE.Vector3()).distanceTo(this.el.object3D.getWorldPosition(new THREE.Vector3()));
-            if (dist < minMsg) {
-              minMsg = dist;
-              closestEl = el;
-            }
-          });
+    const handWorldPos = new THREE.Vector3();
+    this.el.object3D.getWorldPosition(handWorldPos);
 
-          if (closestEl) {
-            this.grabbedEl = closestEl;
-            // "Attach" object to hand (visually) without messing up coordinates
-            this.el.object3D.attach(this.grabbedEl.object3D);
-          }
-        },
-        onRelease: function () {
-          if (this.grabbedEl) {
-            // "Detach" object from hand and put back in scene
-            this.el.sceneEl.object3D.attach(this.grabbedEl.object3D);
-            this.grabbedEl = null;
-          }
-        }
-      });
+    els.forEach(el => {
+      const elWorldPos = new THREE.Vector3();
+      el.object3D.getWorldPosition(elWorldPos);
+      const dist = handWorldPos.distanceTo(elWorldPos);
+      
+      if (dist < minDist) {
+        minDist = dist;
+        closestEl = el;
+      }
+    });
+
+    if (closestEl) {
+      this.grabbedEl = closestEl;
+      this.el.object3D.attach(this.grabbedEl.object3D);
+    }
+  },
+  onRelease: function () {
+    if (this.grabbedEl) {
+      this.el.sceneEl.object3D.attach(this.grabbedEl.object3D);
+      this.grabbedEl = null;
+    }
+  }
+});
     </script>
   </head>
 
