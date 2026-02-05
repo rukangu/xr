@@ -5,46 +5,6 @@
     <title>PhD AR Project: Grabbable Dawgs</title>
     <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
     <script src="https://unpkg.com/aframe-event-set-component@5.x.x/dist/aframe-event-set-component.min.js"></script>
-    
-    <script>
-      AFRAME.registerComponent('pinch-grab', {
-        init: function () {
-          this.grabbedEl = null;
-          // When hand pinches, check for close objects
-          this.el.addEventListener('pinchstarted', this.onPinch.bind(this));
-          // When hand opens, drop the object
-          this.el.addEventListener('pinchended', this.onRelease.bind(this));
-        },
-        onPinch: function (evt) {
-          // Find the closest object in the "interactive" class
-          const handPos = this.el.object3D.position;
-          const els = document.querySelectorAll('.interactive');
-          let closestEl = null;
-          let minMsg = 0.5; // Grab distance threshold (meters)
-
-          els.forEach(el => {
-            const dist = el.object3D.getWorldPosition(new THREE.Vector3()).distanceTo(this.el.object3D.getWorldPosition(new THREE.Vector3()));
-            if (dist < minMsg) {
-              minMsg = dist;
-              closestEl = el;
-            }
-          });
-
-          if (closestEl) {
-            this.grabbedEl = closestEl;
-            // "Attach" object to hand (visually) without messing up coordinates
-            this.el.object3D.attach(this.grabbedEl.object3D);
-          }
-        },
-        onRelease: function () {
-          if (this.grabbedEl) {
-            // "Detach" object from hand and put back in scene
-            this.el.sceneEl.object3D.attach(this.grabbedEl.object3D);
-            this.grabbedEl = null;
-          }
-        }
-      });
-    </script>
   </head>
 
   <body>
@@ -52,7 +12,8 @@
       reflection="directionalLight: #sun"
       renderer="colorManagement: true; exposure: 1; toneMapping: ACESFilmic"
       xr-mode-ui="XRMode: xr"
-      ar-hit-test="target: #objects;"
+      ar-hit-test="target: #objects;" 
+      obb-collider="showColliders: true"
     >
       <a-assets>
         <a-asset-item id="dawg" src="bulldawg.glb"></a-asset-item>
@@ -61,10 +22,10 @@
       <a-light id="sun" type="directional" position="1 4 1" intensity="1.5"></a-light>
       <a-light type="ambient" intensity="0.5"></a-light>
 
-      <a-entity id="rightHand" hand-tracking-controls="hand: right" pinch-grab></a-entity>
-      <a-entity id="leftHand" hand-tracking-controls="hand: left" pinch-grab></a-entity>
+      <a-entity id="leftHand" hand-tracking-grab-controls="hand: left;"></a-entity>
+      <a-entity id="rightHand" hand-tracking-grab-controls="hand: right;"></a-entity>
 
-      <a-entity id="objects" position="0 1.3 -0.5" scale="0.2 0.2 0.2">
+      <a-entity id="objects" position="0 1.3 -0.5" scale="1 1 1">
         
         <a-gltf-model src="#dawg" position="-2 0 0" rotation="0 45 0" scale="2 2 2"
           class="interactive"
