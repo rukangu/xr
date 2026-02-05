@@ -2,73 +2,138 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Interactive AR Bulldogs - Grabbable</title>
+    <title>Interactive AR Bulldogs (Grabbable)</title>
+
+    <!-- Core A-Frame -->
     <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+
+    <!-- Event-set for hover interactions -->
     <script src="https://unpkg.com/aframe-event-set-component@5.x.x/dist/aframe-event-set-component.min.js"></script>
+
+    <!-- Hand tracking + grabbing -->
+    <script src="https://unpkg.com/aframe-hand-tracking-controls@1.0.0/dist/aframe-hand-tracking-controls.min.js"></script>
+    <script src="https://unpkg.com/aframe-grabbable-component/dist/aframe-grabbable-component.min.js"></script>
   </head>
+
   <body>
     <a-scene
+      obb-collider="showColliders: true"
       reflection="directionalLight: #sun"
       ar-hit-test="target: #objects;"
       renderer="colorManagement: true; exposure: 1; toneMapping: ACESFilmic"
       xr-mode-ui="XRMode: xr"
-      obb-collider="showColliders: false"
     >
+
       <a-assets>
         <a-asset-item id="dawg" src="bulldawg.glb"></a-asset-item>
       </a-assets>
 
+      <!-- Lighting -->
       <a-light id="sun" type="directional" position="1 4 1" intensity="1.5"></a-light>
       <a-light type="ambient" intensity="0.5"></a-light>
 
-      <a-entity id="leftHand" hand-tracking-grab-controls="hand: left;"></a-entity>
-      <a-entity id="rightHand" hand-tracking-grab-controls="hand: right;"></a-entity>
+      <!-- Hand tracking -->
+      <a-entity
+        id="leftHand"
+        hand-tracking-grab-controls="hand: left; hoverEnabled: true;">
+      </a-entity>
 
-      <a-entity id="objects" position="0 0 -3" scale="1 1 1">
-        
-        <a-gltf-model src="#dawg" position="-2 0 0" rotation="0 45 0" scale="2 2 2"
-           grabbable
-           event-set__enter="_event: mouseenter; _target: #dawglabel1; visible: true"
-           event-set__leave="_event: mouseleave; _target: #dawglabel1; visible: false">
-          <a-text id="dawglabel1" value="Gooooo dawgs" align="center" color="#FFF" 
-                  visible="false" position="0 1.2 0" geometry="primitive: plane; width: 2" 
-                  material="color: #333">
+      <a-entity
+        id="rightHand"
+        hand-tracking-grab-controls="hand: right; hoverEnabled: true;">
+      </a-entity>
+
+      <!-- Scene objects -->
+      <a-entity id="objects" position="0 0 -3">
+
+        <!-- Bulldog 1 -->
+        <a-gltf-model
+          src="#dawg"
+          position="-2 0 0"
+          rotation="0 45 0"
+          scale="2 2 2"
+          grabbable
+          event-set__enter="_event: mouseenter; _target: #dawglabel1; visible: true"
+          event-set__leave="_event: mouseleave; _target: #dawglabel1; visible: false">
+
+          <a-text
+            id="dawglabel1"
+            value="Gooooo dawgs"
+            align="center"
+            color="#FFF"
+            visible="false"
+            position="0 1.2 0"
+            geometry="primitive: plane; width: 2"
+            material="color: #333">
           </a-text>
         </a-gltf-model>
 
-        <a-gltf-model src="#dawg" position="2 0 0" rotation="0 -45 0" scale="2 2 2"
-           grabbable
-           event-set__enter="_event: mouseenter; _target: #dawglabel2; visible: true"
-           event-set__leave="_event: mouseleave; _target: #dawglabel2; visible: false">
-          <a-text id="dawglabel2" value="Sic em woof x5!" align="center" color="#FFF" 
-                  visible="false" position="0 1.2 0" geometry="primitive: plane; width: 2" 
-                  material="color: #333">
+        <!-- Bulldog 2 -->
+        <a-gltf-model
+          src="#dawg"
+          position="2 0 0"
+          rotation="0 -45 0"
+          scale="2 2 2"
+          grabbable
+          event-set__enter="_event: mouseenter; _target: #dawglabel2; visible: true"
+          event-set__leave="_event: mouseleave; _target: #dawglabel2; visible: false">
+
+          <a-text
+            id="dawglabel2"
+            value="Sic em woof x5!"
+            align="center"
+            color="#FFF"
+            visible="false"
+            position="0 1.2 0"
+            geometry="primitive: plane; width: 2"
+            material="color: #333">
           </a-text>
         </a-gltf-model>
 
-        <a-box position="-1 0.5 2" color="#4CC3D9"
-           grabbable
-           event-set__enter="_event: mouseenter; color: #ff0000"
-           event-set__leave="_event: mouseleave; color: #4CC3D9">
+        <!-- Box -->
+        <a-box
+          position="-1 0.5 2"
+          color="#4CC3D9"
+          grabbable
+          event-set__enter="_event: mouseenter; color: #ff0000"
+          event-set__leave="_event: mouseleave; color: #4CC3D9">
         </a-box>
 
-        <a-cylinder position="1 0.75 2" radius="0.5" height="1.5" color="#FFC65D"
-           grabbable
-           event-set__enter="_event: mouseenter; _target: #cylLabel; visible: true"
-           event-set__leave="_event: mouseleave; _target: #cylLabel; visible: false">
-          <a-text id="cylLabel" value="I am a Cylinder" align="center" color="#FFF" 
-                  visible="false" position="0 1.2 0" geometry="primitive: plane; width: 2" 
-                  material="color: #333">
+        <!-- Cylinder -->
+        <a-cylinder
+          position="1 0.75 2"
+          radius="0.5"
+          height="1.5"
+          color="#FFC65D"
+          grabbable
+          event-set__enter="_event: mouseenter; _target: #cylLabel; visible: true"
+          event-set__leave="_event: mouseleave; _target: #cylLabel; visible: false">
+
+          <a-text
+            id="cylLabel"
+            value="I am a Cylinder"
+            align="center"
+            color="#FFF"
+            visible="false"
+            position="0 1.2 0"
+            geometry="primitive: plane; width: 2"
+            material="color: #333">
           </a-text>
         </a-cylinder>
 
-        <a-sphere position="0 0.5 4" radius="0.75" color="#EF2D5E"
-           grabbable
-           event-set__enter="_event: mouseenter; material.wireframe: true"
-           event-set__leave="_event: mouseleave; material.wireframe: false">
+        <!-- Sphere -->
+        <a-sphere
+          position="0 0.5 4"
+          radius="0.75"
+          color="#EF2D5E"
+          grabbable
+          event-set__enter="_event: mouseenter; material.wireframe: true"
+          event-set__leave="_event: mouseleave; material.wireframe: false">
         </a-sphere>
+
       </a-entity>
-      
+
+      <!-- Camera + cursor (still useful for desktop debugging) -->
       <a-camera>
         <a-cursor color="#FF0000"></a-cursor>
       </a-camera>
