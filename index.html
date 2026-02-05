@@ -2,39 +2,36 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Hello, AR World! • A-Frame</title>
-    <meta name="description" content="Hello, AR World! • A-Frame">
+    <title>3D Model (glTF) - Fixed Lighting</title>
     <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
-    <script>
-      AFRAME.registerComponent('follow-shadow', {
-        schema: {type: 'selector'},
-        init() {this.el.object3D.renderOrder = -1;},
-        tick() {
-          if (this.data) {
-            this.el.object3D.position.copy(this.data.object3D.position);
-            this.el.object3D.position.y-=0.001; // stop z-fighting
-          }
-        }
-      });
-    </script>
   </head>
   <body>
     <a-scene
-      reflection="directionalLight: a-light[type=directional]"
+      reflection="directionalLight: #sun"
       ar-hit-test="target: #objects;"
       renderer="colorManagement: true; exposure: 1; toneMapping: ACESFilmic"
       shadow="type: pcfsoft"
       xr-mode-ui="XRMode: xr"
     >
-      <a-light type="directional" light="castShadow:true;" position="1 1 1" intensity="1.57" shadow-camera-automatic="#objects"></a-light>
-      <a-camera position="0 0.4 0" wasd-controls="acceleration:10;"></a-camera>
-      <a-entity id="objects" scale="0.2 0.2 0.2" position="0 0 -1" shadow>
-        <a-box position="-1 0.5 1" rotation="0 45 0" color="#4CC3D9"></a-box>
-        <a-sphere position="0 1.25 -1" radius="1.25" color="#EF2D5E"></a-sphere>
-        <a-cylinder position="1 0.75 1" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
+      <a-assets>
+        <a-asset-item id="dawg" src="bulldawg.glb"></a-asset-item>
+      </a-assets>
+
+      <a-light id="sun" type="directional" position="1 4 1" intensity="1.5" castShadow="true"></a-light>
+      <a-light type="ambient" intensity="0.5"></a-light>
+
+      <a-entity id="objects" position="0 0 -3">
+         <a-gltf-model 
+           src="#dawg" 
+           rotation="0 45 0" 
+           scale="2 2 2" 
+           shadow="cast: true; receive: true">
+         </a-gltf-model>
       </a-entity>
-      <a-plane follow-shadow="#objects" material="shader:shadow" shadow="cast:false;" rotation="-90 0 0" width="2" height="2"></a-plane>
-      <a-sky color="#ECECEC" hide-on-enter-ar></a-sky>
+
+      <a-entity position="0 0 0">
+        <a-camera></a-camera>
+      </a-entity>
     </a-scene>
   </body>
 </html>
