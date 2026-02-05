@@ -16,12 +16,19 @@
     <script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@master/examples/showcase/hand-tracking/hover.js"></script>
   </head>
   <body>
-    <a-scene environment="preset: contact; ground: flat" obb-collider="showColliders: false">
+    <a-scene  reflection="directionalLight: #sun"
+      ar-hit-test="target: #objects;"
+      renderer="colorManagement: true; exposure: 1; toneMapping: ACESFilmic"
+      shadow="type: pcfsoft"
+      xr-mode-ui="XRMode: xr">
       
       <a-assets>
         <img id="mll" src="mllImage.png" />
       </a-assets>
 
+      <a-light id="sun" type="directional" position="1 4 1" intensity="1.5" castShadow="true"></a-light>
+      <a-light type="ambient" intensity="0.5"></a-light>
+      
       <a-entity camera position="0 1.5 0" look-controls wasd-controls></a-entity>
 
       <a-entity position="0 1.6 -1" grabbable hover>
