@@ -28,14 +28,16 @@
 
       <a-light id="sun" type="directional" position="1 4 1" intensity="1.5" castShadow="true"></a-light>
       <a-light type="ambient" intensity="0.5"></a-light>
-      
+
       <a-entity camera position="0 1.5 0" look-controls wasd-controls></a-entity>
 
       <a-entity position="0 1.6 -1" grabbable hover>
-        <a-entity spatial-modal="width: 1.81; height: 1.035; roundCorners: false">
-          <a-entity spatial-hero-image="src: #mll; width: 1.775; height: 1; roundCorners: false" position="0 0 0.001"></a-entity>
-        </a-entity>
+        <a-entity spatial-modal="width: 1.04; height: 1.44; roundCorners: false">
+        <a-entity spatial-hero-image="src: #mll; width: 1; height: 1.4; roundCorners: false" position="0 0 0.001"></a-entity>
       </a-entity>
+      </a-entity>
+
+      
 
       <a-entity id="rightHand" hand-tracking-grab-controls="hand: right"></a-entity>
       <a-entity id="leftHand" hand-tracking-grab-controls="hand: left"></a-entity>
